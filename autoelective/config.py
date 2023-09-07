@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # filename: config.py
-# modified: 2019-09-10
+# modified: 2023-09-07
 
 import os
 import re
@@ -98,6 +98,10 @@ class AutoElectiveConfig(BaseConfig, metaclass=Singleton):
     @property
     def identity(self):
         return self.get("user", "identity").lower()
+
+    @property
+    def API_token(self):
+        return self.get("user", "API_token")
 
     # [client]
 

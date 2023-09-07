@@ -4,3 +4,4 @@
 # modified: 2019-09-08
 
 from .recognizer import CaptchaRecognizer, Captcha
+from .recognizerAPI import CaptchaRecognizerAPI

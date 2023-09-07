@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # filename: loop.py
-# modified: 2019-09-11
+# modified: 2023-09-07
 
 import os
 import time
@@ -17,7 +17,7 @@ from .environ import Environ
 from .config import AutoElectiveConfig
 from .logger import ConsoleLogger, FileLogger
 from .course import Course
-from .captcha import CaptchaRecognizer
+from .captcha import CaptchaRecognizerAPI
 from .parser import get_tables, get_courses, get_courses_with_detail, get_sida
 from .hook import _dump_request
 from .iaaa import IAAAClient
@@ -51,7 +51,7 @@ config.check_supply_cancel_page(supply_cancel_page)
 _USER_WEB_LOG_DIR = os.path.join(WEB_LOG_DIR, config.get_user_subpath())
 mkdir(_USER_WEB_LOG_DIR)
 
-recognizer = CaptchaRecognizer(CNN_MODEL_FILE)
+recognizer = CaptchaRecognizerAPI(config.API_token)
 
 electivePool = Queue(maxsize=elective_client_pool_size)
 reloginPool = Queue(maxsize=elective_client_pool_size)
@@ -59,7 +59,7 @@ reloginPool = Queue(maxsize=elective_client_pool_size)
 goals = environ.goals  # let N = len(goals);
 ignored = environ.ignored
 mutexes = np.zeros(0, dtype=np.uint8) # uint8 [N][N];
-delays = np.zeros(0, dtype=np.int) # int [N];
+delays = np.zeros(0, dtype=np.int32) # int [N];
 
 killedElective = ElectiveClient(-1)
 NO_DELAY = -1
@@ -149,7 +149,7 @@ def run_iaaa_loop():
                 elective.set_expired_time(int(time.time()) + elective_client_max_life)
 
             cout.info("Login success (client: %s, expired_time: %s)" % (
-                      elective.id, _format_timestamp(elective.expired_time)))
+                    elective.id, _format_timestamp(elective.expired_time)))
             cout.info("")
 
             electivePool.put_nowait(elective)

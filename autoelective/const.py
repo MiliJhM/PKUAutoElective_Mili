@@ -16,7 +16,7 @@ WEB_LOG_DIR             = absp("../log/web/")
 CNN_MODEL_FILE          = absp("../model/cnn.20210311.1.pt")
 USER_AGENTS_TXT_GZ      = absp("../user_agents.txt.gz")
 USER_AGENTS_USER_TXT    = absp("../user_agents.user.txt")
-DEFAULT_CONFIG_INI      = absp("../config.ini")
+DEFAULT_CONFIG_INI      = absp("../config/config.ini")
 
 mkdir(CACHE_DIR)
 mkdir(CAPTCHA_CACHE_DIR)

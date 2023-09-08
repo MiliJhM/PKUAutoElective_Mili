@@ -10,7 +10,7 @@ import sys
 sys.path.append("../")
 
 import os
-from autoelective.captcha import CaptchaRecognizer
+from autoelective.captcha import CaptchaRecognizerAPI
 from autoelective.const import CNN_MODEL_FILE
 
 def test_captcha(r, code):
@@ -20,10 +20,11 @@ def test_captcha(r, code):
         im_data = fp.read()
 
     c = r.recognize(im_data)
-    print(c, c.code == code)
+    cdLower = c.code.lower()
+    print(c, cdLower == code)
 
 def main():
-    r = CaptchaRecognizer(CNN_MODEL_FILE)
+    r = CaptchaRecognizerAPI("") #token
     test_captcha(r, 'er47')
     test_captcha(r, 'rskh')
     test_captcha(r, 'uesg')

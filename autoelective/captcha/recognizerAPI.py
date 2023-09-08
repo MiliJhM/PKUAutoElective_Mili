@@ -8,19 +8,15 @@ import time
 import base64
 import requests
 import json
-from autoelective.hook import get_errInfo
-import numpy as np
 import cv2
-import torch
 
 class Captcha(object):
 
     __slots__ = ['_code','_im_data','_im_segs']
 
-    def __init__(self, code, im_data, im_segs):
+    def __init__(self, code, im_data):
         self._code = code
         self._im_data = im_data
-        self._im_segs = im_segs
 
     @property
     def code(self):
@@ -67,11 +63,12 @@ class CaptchaRecognizerAPI(object):
         print(resp.text)
         return resp.json()['data']['data']
 
-    def recognize(im_data):
-        self.common_verify(im_data) # 1-6位字母混合数字,可动态gif
+    def recognize(self, im_data):
+        code = self.common_verify(im_data) # 1-6位字母混合数字,可动态gif
+        return Captcha(code, im_data)
 
 
 if __name__ == '__main__':
-    recognizer = CaptchaRecognizerAPI("qY8mhsvmEmp5WtTTWPkQxpeVY9iNpKuus5TiA0EKWoI")
-    im_data = open("D:\\PKUAutoElective_Mili\\autoelective\\captcha\\er47.gif", "rb").read()
+    recognizer = CaptchaRecognizerAPI("")
+    im_data = open("DrawServlet.jpg", "rb").read()
     print(recognizer.common_verify(im_data))

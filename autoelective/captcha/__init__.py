@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 # filename: __init__.py
-# modified: 2019-09-08
+# modified: 2023-09-08
 
-from .recognizer import CaptchaRecognizer, Captcha
-from .recognizerAPI import CaptchaRecognizerAPI
+# from .recognizer import CaptchaRecognizer, Captcha
+from .recognizerAPI import CaptchaRecognizerAPI, Captcha

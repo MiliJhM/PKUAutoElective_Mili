@@ -2,6 +2,7 @@
 __pycache__/
 /log
 /cache
+/config
 /bin
 /archive
 /tmp

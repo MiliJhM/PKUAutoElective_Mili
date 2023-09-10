@@ -31,7 +31,6 @@ class Captcha(object):
     def save(self, folder):
         code = self._code
         data = self._im_data
-        segs = self._im_segs
         timestamp = int(time.time() * 1000)
 
         filepath = os.path.join(folder, "%s_%d.gif" % (code, timestamp))

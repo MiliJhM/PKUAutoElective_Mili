@@ -38,9 +38,6 @@ class Captcha(object):
         with open(filepath, 'wb') as fp:
             fp.write(data)
 
-        for ix, M in enumerate(segs):
-            filepath = os.path.join(folder, "%s_c%d_%d.png" % (code, ix, timestamp))
-            cv2.imwrite(filepath, M)
 
 
 class CaptchaRecognizerAPI(object):

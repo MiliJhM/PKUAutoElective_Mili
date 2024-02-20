@@ -5,7 +5,6 @@ __pycache__/
 /bin
 /archive
 /tmp
-config_bzx.ini
-config_bfx.ini
-config.ini
 user_agents.user.txt
+/config
+run.*

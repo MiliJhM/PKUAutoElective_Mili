@@ -8,7 +8,38 @@ import time
 import base64
 import requests
 import json
-import cv2
+
+import logging
+
+
+class Logger(object):
+    def __init__(self) -> None:
+        self._name = "Recognizer"
+        self._level = logging.DEBUG
+        self._format = logging.Formatter("[%(levelname)s] %(name)s, %(asctime)s, %(message)s", "%H:%M:%S")
+        self._logger = logging.getLogger(self._name)
+        self._logger.setLevel(self._level)
+        self._handler = logging.StreamHandler()
+        self._handler.setLevel(self._level)
+        self._handler.setFormatter(self._format)
+        self._logger.addHandler(self._handler)
+
+    def debug(self, msg, *args, **kwargs):
+        return self._logger.debug(msg, *args, **kwargs)
+
+    def info(self, msg, *args, **kwargs):
+        return self._logger.info(msg, *args, **kwargs)
+
+    def warn(self, msg, *args, **kwargs):
+        return self._logger.warn(msg, *args, **kwargs)
+
+    def warning(self, msg, *args, **kwargs):
+        return self._logger.warning(msg, *args, **kwargs)
+
+    def error(self, msg, *args, **kwargs):
+        return self._logger.error(msg, *args, **kwargs)
+
+logger = Logger()
 
 class Captcha(object):
 
@@ -31,16 +62,11 @@ class Captcha(object):
     def save(self, folder):
         code = self._code
         data = self._im_data
-        segs = self._im_segs
         timestamp = int(time.time() * 1000)
 
         filepath = os.path.join(folder, "%s_%d.gif" % (code, timestamp))
         with open(filepath, 'wb') as fp:
             fp.write(data)
-
-        for ix, M in enumerate(segs):
-            filepath = os.path.join(folder, "%s_c%d_%d.png" % (code, ix, timestamp))
-            cv2.imwrite(filepath, M)
 
 
 class CaptchaRecognizerAPI(object):
@@ -58,17 +84,22 @@ class CaptchaRecognizerAPI(object):
             "token": self.__token,
             "type": verify_type
         }
-        print(payload)
-        resp = requests.post(self.__custom_url, headers=self.__headers, data=json.dumps(payload))
-        print(resp.text)
+        logger.info("Requesting captcha recognition service...")
+        try:
+            resp = requests.post(self.__custom_url, headers=self.__headers, data=json.dumps(payload))
+            logger.info("Response: %s" % resp.text)
+        except:
+            logger.error("Request failed.")
+            logger.error("Response:")
         return resp.json()['data']['data']
 
     def recognize(self, im_data):
-        code = self.common_verify(im_data) # 1-6位字母混合数字,可动态gif
+        code = self.common_verify(im_data) # 1-5位字母混合数字,可动态gif
         return Captcha(code, im_data)
 
 
 if __name__ == '__main__':
-    recognizer = CaptchaRecognizerAPI("")
+    token =  input("Your token here")
+    recognizer = CaptchaRecognizerAPI(token)
     im_data = open("DrawServlet.jpg", "rb").read()
-    print(recognizer.common_verify(im_data))
+    logger.info("Recognizing Result: %s" % recognizer.common_verify(im_data))
